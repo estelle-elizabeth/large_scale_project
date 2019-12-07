@@ -1,6 +1,7 @@
 import order_pb2_grpc
 import order_pb2
 import redis
+import time
 
 
 from concurrent import futures
@@ -15,21 +16,76 @@ r = redis.Redis(
 
 class Order(order_pb2_grpc.OrderServicer):
 
-	def GetState(self, request, context):
-		order = str(request.orderID)
-
-		state = r.get(order)
-
-		return order_pb2.GetReply(answer = state)
-			
+    def GetState(self, request, context):
+        order = request.orderID
+        stateNum = r.exists(order)
+        output = "Your order "
 
 
-	def SetState(self, request, context):
-		order = str(request.orderID)
+        if stateNum == 0:
+            output = "Sorry, order does not exist."
+            timeSince = ""
 
-		r.set(order, state)
+        else:
+            state = str(r.hget(order, "state"))
+            state = state[2:len(state)-1]
+            timeOrdered = str(r.hget(order, "time"))
+            timeOrdered = float(timeOrdered[2: len(timeOrdered) - 1])
 
-		return order_pb2.SetReply(answer = order + " has been " + state)
+            if state == 'ordered':
+                output += "has been placed."
+            
+            elif state == 'processing':
+                output += "is processing and will be ready soon."
+
+            elif state == 'finished':
+                output += "is finished and has been shipped."
+
+            else:
+                output += "has been delivered."
+
+            diff, rem = divmod(time.time() - timeOrdered, 60)
+            timeSince = "Placed " + str(int(diff)) + "m " + str(int(rem)) + "s ago."
+        
+
+        return order_pb2.GetReply(answer = output + '\n' + timeSince)
+            
+
+
+    def SetState(self, request, context):
+        order = request.orderID
+        stateNum = r.exists(order)
+
+        if stateNum == 0:
+            state = 'ordered'
+            timeOrdered = time.time()
+            r.hset(order, "state", state)
+            r.hset(order, "time", timeOrdered)
+            output = "Order " + order + " has been placed."
+            
+
+        else:
+            state = str(r.hget(order, "state"))
+            state = state[2:len(state)-1]
+            output = "State of Order " + order + " has been set to "
+
+            
+            if state == 'ordered':
+                state = 'processing'
+                output += "PROCESSING."
+            
+            elif state == 'processing':
+                state = 'finished'
+                output += "FINISHED AND SHIPPED."
+
+            else:
+                state = 'delivered'
+                output += "DELIVERED."
+
+            r.hset(order, "state", state)
+            
+
+        return order_pb2.SetReply(answer = output)
 
 
 
