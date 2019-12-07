@@ -26,7 +26,6 @@ class Order(order_pb2_grpc.OrderServicer):
 
 	def SetState(self, request, context):
 		order = str(request.orderID)
-		state = request.state
 
 		r.set(order, state)
 

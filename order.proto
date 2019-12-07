@@ -9,7 +9,7 @@ service Order{
 }
 
 message GetRequest{
-	int32 orderID = 1;
+	string orderID = 1;
 }
 
 message GetReply{
@@ -17,8 +17,7 @@ message GetReply{
 }
 
 message SetRequest{
-	int32 orderID = 1;
-	string state = 2;
+	string orderID = 1;
 }
 
 message SetReply{

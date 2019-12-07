@@ -26,8 +26,7 @@ def run():
 
 	
 	elif task == 'set':
-		orderState = sys.argv[3]
-		response = stub.SetState(order_pb2.SetRequest(orderID=order, state = orderState))
+		response = stub.SetState(order_pb2.SetRequest(orderID=order))
 		print(response.answer)
 	
 
