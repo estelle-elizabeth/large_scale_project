@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package orders;
+
+service Order{
+	rpc GetState(GetRequest) returns (GetReply) {}
+
+	rpc SetState(SetRequest) returns (SetReply) {}
+}
+
+message GetRequest{
+	int32 orderID = 1;
+}
+
+message GetReply{
+	string answer = 1;
+}
+
+message SetRequest{
+	int32 orderID = 1;
+	string state = 2;
+}
+
+message SetReply{
+	string answer = 1;
+}
