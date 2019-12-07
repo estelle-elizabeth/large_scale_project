@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_grpc',
 ]
 
 MIDDLEWARE = [
@@ -98,6 +99,13 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+GRPCSERVER = {
+	'servicers':['dotted.path.to.callback'],
+	'interceptors':['dotted.path.to.interceptor_class',],
+	'maximum_concurrent_rpcs':None,
+}
 
 
 # Internationalization
