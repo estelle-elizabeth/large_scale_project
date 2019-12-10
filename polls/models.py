@@ -31,7 +31,7 @@ class truck(models.Model):
     # and send it using rpc automatically
 
 class user_truck(models.Model):
-    user_id = models.CharField(max_length=50)
+    user_id = models.IntegerField(default=0)
     truck_id = models.CharField(max_length=50)
 
 

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+from grpc_django import GRPCSettings, GRPCService
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,7 +39,27 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'grpc_django',
 ]
+"""
+GRPCSERVER = {
+    'servicers': ['dotted.path.to.callback.eg.grpc_hook'],  # see `grpc_hook()` below
+    'interceptors': ['dotted.path.to.interceptor_class',],  # optional, interceprots are similar to middleware in Django
+    'maximum_concurrent_rpcs': None,
+}
+"""
+GRPC_SETTINGS = GRPCSettings(
+    services=[GRPCService(
+        # Name of the service as defined in .proto definition
+        name='Order',
+        # The package name as defined in .proto definition (in our case it should look like `package user;`
+        package_name='order',
+        # The path (relative to `manage.py`) to the .proto definition
+        proto_path='polls/order.proto',
+        # This will be the list of RPCs similar to `urls.py` definition in Django
+        rpc_conf='polls.rpc'
+    )]
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
