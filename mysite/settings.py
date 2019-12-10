@@ -73,6 +73,16 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'mysite.urls'
 
+
+LOCAL_APPS = (
+	'large_scale_project.api',
+)
+
+THIRD_PARTY_APPS = (
+	'rest_framework'
+)
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -143,5 +153,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
+
+REST_FRAMEWORK = {
+}
 
 STATIC_URL = '/static/'
