@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Food Truck</title>
+</head> 
+<body>
+    <h1>truck list</h1>
+
+    <ul>
+    {% for truck in truck_list %}
+       <li><a href="/polls/order_confirmed">{{ truck.truck_id}} has {{ truck.menu }} for you
+    {% endfor %}</a></li>
+    </ul>
+    <h1>UPDATE LIST</h1>
+
+    <ul>
+    {% for update in update_list %}
+         <li><a href="/polls/{{ update.user_id }}/update">order number {{ update.user_id}} {{ update.truck_id }}</a></li>
+    {% endfor %} 
+    </ul>
+    
+    <h1>GET STATUS</h1>
+     <ul>
+    {% for update in update_list %}
+         <li><a href="/polls/{{ update.user_id }}/status">order number {{ update.user_id}} {{ update.truck_id }}</a></li>
+    {% endfor %} 
+    </ul>   
+</body>
+</html>
